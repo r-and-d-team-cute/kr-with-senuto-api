@@ -1,0 +1,17 @@
+{
+  "name": "kr-senuto",
+  "version": "1.0.0",
+  "description": "Senuto API integration with React frontend and Node.js backend",
+  "scripts": {
+    "start": "concurrently \"npm run server\" \"npm run client\"",
+    "server": "cd server && npm run dev",
+    "client": "cd client && npm start",
+    "install-all": "npm install && cd client && npm install && cd ../server && npm install"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "concurrently": "^6.4.0"
+  }
+}

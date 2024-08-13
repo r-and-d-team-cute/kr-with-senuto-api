@@ -1,0 +1,44 @@
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.input {
+  width: 100%;
+  padding: 0.75rem;
+  margin-bottom: 1rem; /* Zwiększony odstęp między inputami */
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 1rem;
+}
+
+.buttonContainer {
+  display: flex;
+  flex-direction: column; /* Przyciski w kolumnie */
+  gap: 1rem; /* Odstęp między przyciskami */
+  margin-top: 1.5rem; /* Dodatkowy odstęp od inputów */
+}
+
+.button {
+  padding: 0.75rem 1.5rem; /* Zwiększone padding */
+  background-color: #20b2aa;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+@media (min-width: 768px) {
+  .buttonContainer {
+    flex-direction: row; /* Przyciski obok siebie na większych ekranach */
+    justify-content: space-between;
+  }
+
+  .button {
+    flex: 1; /* Przyciski zajmują równą przestrzeń */
+    max-width: calc(50% - 0.5rem); /* Maksymalna szerokość przycisku */
+  }
+}

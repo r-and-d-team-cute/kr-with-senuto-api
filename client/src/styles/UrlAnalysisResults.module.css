@@ -1,0 +1,42 @@
+.results {
+  margin-top: 1.5rem;
+  overflow-x: auto;
+}
+
+.resultTable {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: #f9f9f9;
+}
+
+.resultTable th,
+.resultTable td {
+  border: 1px solid #e0e0e0;
+  padding: 0.75rem;
+  text-align: left;
+}
+
+.resultTable th {
+  background-color: #20b2aa;
+  color: white;
+}
+
+.resultTable tr:nth-child(even) {
+  background-color: #f0f0f0;
+}
+
+.urlCell {
+  max-width: 200px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.urlCell a {
+  color: #20b2aa;
+  text-decoration: none;
+}
+
+.urlCell a:hover {
+  text-decoration: underline;
+}
