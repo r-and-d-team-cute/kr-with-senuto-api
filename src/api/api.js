@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: '/api',
+  baseURL: 'https://kr-with-senuto-api-gtij.onrender.com/api',
   withCredentials: true,
 });
 
