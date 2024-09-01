@@ -24,8 +24,8 @@ exports.login = async (req, res) => {
     // Ustawianie HttpOnly Cookie z tokenem z API Senuto
     res.cookie('token', result.token, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'strict',
+      secure: true,
+      sameSite: 'none',
       maxAge: 30 * 24 * 60 * 60 * 1000, // 30 dni
     });
 
