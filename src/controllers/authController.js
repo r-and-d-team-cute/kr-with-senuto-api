@@ -29,6 +29,14 @@ exports.login = async (req, res) => {
       maxAge: 30 * 24 * 60 * 60 * 1000, // 30 dni
     });
 
+    // Ustawianie ciasteczka z emailem użytkownika
+    res.cookie('user', email, {
+      httpOnly: true,
+      secure: true,
+      sameSite: 'none',
+      maxAge: 30 * 24 * 60 * 60 * 1000, // 30 dni
+    });
+
     res.json({ user: result.user, message: 'Zalogowano pomyślnie' });
   } catch (error) {
     res.status(400).json({ error: error.message });
@@ -41,8 +49,14 @@ exports.logout = (req, res) => {
 };
 
 exports.getCurrentUser = (req, res) => {
-  // req.user jest ustawiany przez middleware auth
-  res.json({ user: req.user });
+  const token = req.cookies.token;
+  const userEmail = req.cookies.user;
+
+  if (!token || !userEmail) {
+    return res.status(401).json({ error: 'Użytkownik niezalogowany' });
+  }
+
+  res.status(200).json({ user: userEmail });
 };
 
 exports.testConnection = async (req, res) => {
