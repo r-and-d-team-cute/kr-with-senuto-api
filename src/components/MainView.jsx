@@ -65,7 +65,7 @@ const MainView = ({
   return (
     <div className={styles.mainContainer}>
       <div className={styles.header}>
-        <h1>Witaj, {user.email}!</h1>
+        <h1>Czołem, {user}!</h1>
         <button
           onClick={handleLogout}
           className={styles.logoutButton}

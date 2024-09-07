@@ -17,8 +17,17 @@ export const logout = async () => {
 };
 
 export const getCurrentUser = async () => {
-  const response = await api.get('/getCurrentUser');
-  return response.data;
+  try {
+    const response = await api.get('/getCurrentUser');
+    return { user: response.data.user, success: true };
+  } catch (error) {
+    console.error('Błąd podczas pobierania danych użytkownika:', error);
+    return {
+      user: null,
+      success: false,
+      error: error.response?.data?.error || 'Wystąpił błąd',
+    };
+  }
 };
 
 export const getKeywordsPropositions = async (keywords) => {

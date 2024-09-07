@@ -26,17 +26,27 @@ function App() {
   useEffect(() => {
     const checkLoginStatus = async () => {
       try {
-        const { user } = await getCurrentUser();
-        if (user) {
+        const { user, success } = await getCurrentUser();
+        if (success && user) {
           setUser(user);
           setLoginStatus({
             type: 'success',
-            message: 'User successfully authenticated.',
+            message: 'Użytkownik pomyślnie uwierzytelniony.',
+          });
+        } else {
+          setUser(null);
+          setLoginStatus({
+            type: 'info',
+            message: 'Błąd logowania, proszę zalogować się, aby kontynuować.',
           });
         }
       } catch (error) {
-        console.error('User not logged in', error);
-        setLoginStatus({ type: 'info', message: 'Please log in to continue.' });
+        console.error('Błąd podczas sprawdzania statusu logowania:', error);
+        setUser(null);
+        setLoginStatus({
+          type: 'error',
+          message: 'Wystąpił błąd podczas sprawdzania statusu logowania.',
+        });
       } finally {
         setLoading(false);
       }
@@ -48,17 +58,17 @@ function App() {
   const handleLogin = async (email, password) => {
     try {
       const { user } = await login(email, password);
-      setUser(user);
+      setUser(user.email);
       setLoginStatus({
         type: 'success',
-        message: 'Login successful. Bearer token set.',
+        message: 'Użytkownik zalogowany. Token jest git.',
       });
     } catch (error) {
       console.error('Login failed', error);
       setLoginStatus({
         type: 'error',
         message:
-          error.response?.data?.message || 'Login failed. Please try again.',
+          error.response?.data?.message || 'Błąd logowania, spróbuj ponownie.',
       });
     }
   };
@@ -70,13 +80,13 @@ function App() {
 
       setLoginStatus({
         type: 'info',
-        message: 'User logged out successfully.',
+        message: 'Użytkownik wylogowany pomyślnie.',
       });
     } catch (error) {
       console.error('Logout failed', error);
       setLoginStatus({
         type: 'error',
-        message: 'Logout failed. Please try again.',
+        message: 'Błąd podczas wylogowywania. Spróbuj ponownie.',
       });
     }
   };
@@ -140,7 +150,7 @@ function App() {
   };
 
   if (loading) {
-    return <div>Checking authentication status...</div>;
+    return <div>Sprawdzanie, czy jesteś dobrym ziomkiem...</div>;
   }
 
   if (!user) {
