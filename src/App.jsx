@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Login from './components/Login';
 import MainView from './components/MainView';
+import LoadingScreen from './components/LoadingScreen';
 import {
   getCurrentUser,
   login,
