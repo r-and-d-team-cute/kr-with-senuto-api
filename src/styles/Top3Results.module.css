@@ -20,6 +20,11 @@
   margin-right: 10px;
 }
 
+.button:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+}
+
 .urlLink {
   color: #20b2aa;
   text-decoration: none;
