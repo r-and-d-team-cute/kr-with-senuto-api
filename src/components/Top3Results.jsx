@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import styles from '../styles/Top3Results.module.css';
 
-const Top3Results = ({ results, onAnalyze }) => {
+const Top3Results = ({ results, onAnalyze, loadingStates }) => {
   const [selectedUrls, setSelectedUrls] = useState({});
 
   useEffect(() => {
@@ -40,6 +40,7 @@ const Top3Results = ({ results, onAnalyze }) => {
               checked={selectedUrls[url] || false}
               onChange={() => handleCheckboxChange(url)}
               className={styles.checkbox}
+              disabled={loadingStates.urlAnalysis}
             />
             <a
               href={url}
@@ -56,8 +57,11 @@ const Top3Results = ({ results, onAnalyze }) => {
         <button
           onClick={handleAnalyze}
           className={styles.analyzeButton}
+          disabled={loadingStates.urlAnalysis}
         >
-          Analizuj zaznaczone URL-e
+          {loadingStates.urlAnalysis
+            ? 'Analizuję...'
+            : 'Analizuj zaznaczone URL-e'}
         </button>
       )}
     </div>

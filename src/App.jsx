@@ -22,6 +22,16 @@ function App() {
   const [relatedKeywordsResults, setRelatedKeywordsResults] = useState([]);
   const [top3Results, setTop3Results] = useState([]);
   const [urlAnalysisResults, setUrlAnalysisResults] = useState([]);
+  const [loadingStates, setLoadingStates] = useState({
+    keywordPropositions: false,
+    relatedKeywords: false,
+    top3Results: false,
+    urlAnalysis: false,
+  });
+
+  const setLoadingState = (key, value) => {
+    setLoadingStates((prev) => ({ ...prev, [key]: value }));
+  };
 
   useEffect(() => {
     const checkLoginStatus = async () => {
@@ -93,6 +103,7 @@ function App() {
 
   const handleKeywordPropositionSubmit = async (keywords) => {
     setKeywordError(null);
+    setLoadingState('keywordPropositions', true);
     try {
       const data = await getKeywordsPropositions(keywords);
       if (Array.isArray(data)) {
@@ -106,11 +117,14 @@ function App() {
       setKeywordError(
         err.message || 'Wystąpił błąd podczas analizy słów kluczowych'
       );
+    } finally {
+      setLoadingState('keywordPropositions', false);
     }
   };
 
   const handleRelatedKeywordsSubmit = async (keywords) => {
     setKeywordError(null);
+    setLoadingState('relatedKeywords', true);
     try {
       const data = await getRelatedKeywords(keywords);
       if (Array.isArray(data)) {
@@ -124,11 +138,14 @@ function App() {
       setKeywordError(
         err.message || 'Wystąpił błąd podczas analizy słów kluczowych'
       );
+    } finally {
+      setLoadingState('relatedKeywords', false);
     }
   };
 
   const handleTop3ResultsSubmit = async (keywords) => {
     setKeywordError(null);
+    setLoadingState('top3Results', true);
     try {
       const data = await getTop3Results(keywords);
       setTop3Results(data);
@@ -136,16 +153,21 @@ function App() {
       setKeywordError(
         err.message || 'Wystąpił błąd podczas pobierania TOP3 wyników'
       );
+    } finally {
+      setLoadingState('top3Results', false);
     }
   };
 
   const handleUrlAnalysis = async (urls) => {
     setKeywordError(null);
+    setLoadingState('urlAnalysis', true);
     try {
       const data = await analyzeUrls(urls);
       setUrlAnalysisResults(data);
     } catch (err) {
       setKeywordError(err.message || 'Wystąpił błąd podczas analizy URL');
+    } finally {
+      setLoadingState('urlAnalysis', false);
     }
   };
 
@@ -176,6 +198,7 @@ function App() {
       top3Results={top3Results}
       handleUrlAnalysis={handleUrlAnalysis}
       urlAnalysisResults={urlAnalysisResults}
+      loadingStates={loadingStates}
     />
   );
 }

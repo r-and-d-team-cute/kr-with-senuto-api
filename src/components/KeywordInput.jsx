@@ -1,7 +1,12 @@
 import React, { useState } from 'react';
 import styles from '../styles/KeywordInput.module.css';
 
-const KeywordInput = ({ onSubmit, onRelatedSubmit, onTop3Submit }) => {
+const KeywordInput = ({
+  onSubmit,
+  onRelatedSubmit,
+  onTop3Submit,
+  loadingStates,
+}) => {
   const [keywords, setKeywords] = useState(['', '', '', '', '']);
 
   const handleChange = (index, value) => {
@@ -29,6 +34,7 @@ const KeywordInput = ({ onSubmit, onRelatedSubmit, onTop3Submit }) => {
           onChange={(e) => handleChange(index, e.target.value)}
           placeholder={`Słowo kluczowe ${index + 1}`}
           className={styles.input}
+          disabled={Object.values(loadingStates).some((state) => state)}
         />
       ))}
       <div className={styles.buttonContainer}>
@@ -36,22 +42,29 @@ const KeywordInput = ({ onSubmit, onRelatedSubmit, onTop3Submit }) => {
           type='submit'
           className={styles.button}
           onClick={(e) => handleSubmit(e, onSubmit)}
+          disabled={loadingStates.keywordPropositions}
         >
-          Analizuj propozycje słów kluczowych
+          {loadingStates.keywordPropositions
+            ? 'Analizuję...'
+            : 'Analizuj propozycje słów kluczowych'}
         </button>
         <button
           type='submit'
           className={styles.button}
           onClick={(e) => handleSubmit(e, onRelatedSubmit)}
+          disabled={loadingStates.relatedKeywords}
         >
-          Analizuj powiązane słowa kluczowe
+          {loadingStates.relatedKeywords
+            ? 'Analizuję...'
+            : 'Analizuj powiązane słowa kluczowe'}
         </button>
         <button
           type='submit'
           className={styles.button}
           onClick={(e) => handleSubmit(e, onTop3Submit)}
+          disabled={loadingStates.top3Results}
         >
-          Pobierz TOP 3 wyniki
+          {loadingStates.top3Results ? 'Pobieram...' : 'Pobierz TOP 3 wyniki'}
         </button>
       </div>
     </form>
