@@ -172,7 +172,7 @@ function App() {
   };
 
   if (loading) {
-    return <div>Sprawdzanie, czy jesteś dobrym ziomkiem...</div>;
+    return <LoadingScreen />;
   }
 
   if (!user) {
