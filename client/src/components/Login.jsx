@@ -14,7 +14,7 @@ const Login = ({ onLogin, statusMessage }) => {
   return (
     <div className={styles.loginContainer}>
       <div className={styles.loginBox}>
-        <h2 className={styles.title}>Login</h2>
+        <h2 className={styles.title}>Logowanie</h2>
         {statusMessage && (
           <div
             className={`${styles.statusMessage} ${styles[statusMessage.type]}`}
@@ -53,14 +53,14 @@ const Login = ({ onLogin, statusMessage }) => {
                 checked={showPassword}
                 onChange={() => setShowPassword(!showPassword)}
               />
-              Show Password
+              Pokaż hasełko
             </label>
           </div>
           <button
             type='submit'
             className={styles.loginButton}
           >
-            SIGN IN
+            ZALOGUJ SIĘ
           </button>
         </form>
       </div>

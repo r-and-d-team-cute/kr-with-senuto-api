@@ -19,6 +19,7 @@ const MainView = ({
   top3Results,
   handleUrlAnalysis,
   urlAnalysisResults,
+  loadingStates,
 }) => {
   const [activeTab, setActiveTab] = useState('propositions');
   const [showScrollTop, setShowScrollTop] = useState(false);
@@ -40,17 +41,6 @@ const MainView = ({
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  // const copyToClipboard = (data) => {
-  //   navigator.clipboard
-  //     .writeText(data)
-  //     .then(() => {
-  //       alert('Skopiowano do schowka!');
-  //     })
-  //     .catch((err) => {
-  //       console.error('Błąd podczas kopiowania: ', err);
-  //     });
-  // };
-
   const downloadCSV = (data, type, filename) => {
     const csvContent = convertToCSV(data, type);
     const encodedUri = encodeURI(`data:text/csv;charset=utf-8,${csvContent}`);
@@ -65,7 +55,7 @@ const MainView = ({
   return (
     <div className={styles.mainContainer}>
       <div className={styles.header}>
-        <h1>Witaj, {user.email}!</h1>
+        <h1>Czołem, {user}!</h1>
         <button
           onClick={handleLogout}
           className={styles.logoutButton}
@@ -85,9 +75,14 @@ const MainView = ({
           onSubmit={handleKeywordPropositionSubmit}
           onRelatedSubmit={handleRelatedKeywordsSubmit}
           onTop3Submit={handleTop3ResultsSubmit}
+          loadingStates={loadingStates}
         />
         {keywordError && <p className={styles.error}>{keywordError}</p>}
       </div>
+
+      {Object.values(loadingStates).some((state) => state) && (
+        <div className={styles.loadingIndicator}>Trwa ładowanie danych...</div>
+      )}
 
       <div className={styles.tabsContainer}>
         <button
@@ -132,13 +127,6 @@ const MainView = ({
                 Propozycje słów kluczowych
               </h3>
               <div className={styles.actionButtons}>
-                {/* <button
-                  onClick={() =>
-                    copyToClipboard(JSON.stringify(keywordPropositionResults))
-                  }
-                >
-                  Kopiuj
-                </button> */}
                 <button
                   onClick={() =>
                     downloadCSV(
@@ -163,13 +151,6 @@ const MainView = ({
             <div className={styles.resultHeader}>
               <h3 className={styles.resultsTitle}>Powiązane słowa kluczowe</h3>
               <div className={styles.actionButtons}>
-                {/* <button
-                  onClick={() =>
-                    copyToClipboard(JSON.stringify(relatedKeywordsResults))
-                  }
-                >
-                  Kopiuj
-                </button> */}
                 <button
                   onClick={() =>
                     downloadCSV(
@@ -194,11 +175,6 @@ const MainView = ({
             <div className={styles.resultHeader}>
               <h3 className={styles.resultsTitle}>TOP 3 Wyniki</h3>
               <div className={styles.actionButtons}>
-                {/* <button
-                  onClick={() => copyToClipboard(JSON.stringify(top3Results))}
-                >
-                  Kopiuj
-                </button> */}
                 <button
                   onClick={() =>
                     downloadCSV(top3Results, 'top3', 'top3_wyniki.csv')
@@ -211,6 +187,7 @@ const MainView = ({
             <Top3Results
               results={top3Results}
               onAnalyze={handleUrlAnalysis}
+              loadingStates={loadingStates}
             />
           </>
         )}
@@ -219,13 +196,6 @@ const MainView = ({
             <div className={styles.resultHeader}>
               <h3 className={styles.resultsTitle}>Analiza URL</h3>
               <div className={styles.actionButtons}>
-                {/* <button
-                  onClick={() =>
-                    copyToClipboard(JSON.stringify(urlAnalysisResults))
-                  }
-                >
-                  Kopiuj
-                </button> */}
                 <button
                   onClick={() =>
                     downloadCSV(

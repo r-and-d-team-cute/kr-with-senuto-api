@@ -14,8 +14,8 @@ const UrlAnalysisResults = ({ results }) => {
           </tr>
         </thead>
         <tbody>
-          {results.flatMap((result, index) =>
-            result.keywords.map((keyword, kIndex) => (
+          {results?.flatMap((result, index) =>
+            result?.keywords?.map((keyword, kIndex) => (
               <tr key={`${index}-${kIndex}`}>
                 {kIndex === 0 && (
                   <td

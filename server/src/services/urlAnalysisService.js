@@ -25,26 +25,6 @@ exports.getKeywordsForUrls = async (urls, token) => {
 exports.getKeywordsForSingleUrl = async (url, token) => {
   console.log(`Rozpoczynanie żądania dla URL: "${url}"`);
 
-  //   const formData = new FormData();
-  //   formData.append('domain', url);
-  //   formData.append('fetch_mode', 'url');
-  //   formData.append('country_id', '200');
-  //     formData.append(
-  //       'filtering',
-  //       JSON.stringify([
-  //         {
-  //           filters: [
-  //             {
-  //               value: '10',
-  //               match: 'lte',
-  //               key: 'statistics.position.current',
-  //               type: 'number',
-  //             },
-  //           ],
-  //         },
-  //       ])
-  //     );
-
   const payload = {
     domain: url,
     fetch_mode: 'url',

@@ -180,3 +180,13 @@
     max-width: none;
   }
 }
+
+.loadingIndicator {
+  text-align: center;
+  padding: 1rem;
+  background-color: #f0f0f0;
+  border-radius: 4px;
+  margin-bottom: 1rem;
+  font-style: italic;
+  color: #666;
+}

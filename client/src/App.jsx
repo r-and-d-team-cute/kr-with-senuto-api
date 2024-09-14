@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Login from './components/Login';
 import MainView from './components/MainView';
+import LoadingScreen from './components/LoadingScreen';
 import {
   getCurrentUser,
   login,
@@ -22,21 +23,41 @@ function App() {
   const [relatedKeywordsResults, setRelatedKeywordsResults] = useState([]);
   const [top3Results, setTop3Results] = useState([]);
   const [urlAnalysisResults, setUrlAnalysisResults] = useState([]);
+  const [loadingStates, setLoadingStates] = useState({
+    keywordPropositions: false,
+    relatedKeywords: false,
+    top3Results: false,
+    urlAnalysis: false,
+  });
+
+  const setLoadingState = (key, value) => {
+    setLoadingStates((prev) => ({ ...prev, [key]: value }));
+  };
 
   useEffect(() => {
     const checkLoginStatus = async () => {
       try {
-        const { user } = await getCurrentUser();
-        if (user) {
+        const { user, success } = await getCurrentUser();
+        if (success && user) {
           setUser(user);
           setLoginStatus({
             type: 'success',
-            message: 'User successfully authenticated.',
+            message: 'Użytkownik pomyślnie uwierzytelniony.',
+          });
+        } else {
+          setUser(null);
+          setLoginStatus({
+            type: 'info',
+            message: 'Błąd logowania, proszę zalogować się, aby kontynuować.',
           });
         }
       } catch (error) {
-        console.error('User not logged in', error);
-        setLoginStatus({ type: 'info', message: 'Please log in to continue.' });
+        console.error('Błąd podczas sprawdzania statusu logowania:', error);
+        setUser(null);
+        setLoginStatus({
+          type: 'error',
+          message: 'Wystąpił błąd podczas sprawdzania statusu logowania.',
+        });
       } finally {
         setLoading(false);
       }
@@ -48,17 +69,17 @@ function App() {
   const handleLogin = async (email, password) => {
     try {
       const { user } = await login(email, password);
-      setUser(user);
+      setUser(user.email);
       setLoginStatus({
         type: 'success',
-        message: 'Login successful. Bearer token set.',
+        message: 'Użytkownik zalogowany. Token jest git.',
       });
     } catch (error) {
       console.error('Login failed', error);
       setLoginStatus({
         type: 'error',
         message:
-          error.response?.data?.message || 'Login failed. Please try again.',
+          error.response?.data?.message || 'Błąd logowania, spróbuj ponownie.',
       });
     }
   };
@@ -70,19 +91,20 @@ function App() {
 
       setLoginStatus({
         type: 'info',
-        message: 'User logged out successfully.',
+        message: 'Użytkownik wylogowany pomyślnie.',
       });
     } catch (error) {
       console.error('Logout failed', error);
       setLoginStatus({
         type: 'error',
-        message: 'Logout failed. Please try again.',
+        message: 'Błąd podczas wylogowywania. Spróbuj ponownie.',
       });
     }
   };
 
   const handleKeywordPropositionSubmit = async (keywords) => {
     setKeywordError(null);
+    setLoadingState('keywordPropositions', true);
     try {
       const data = await getKeywordsPropositions(keywords);
       if (Array.isArray(data)) {
@@ -96,11 +118,14 @@ function App() {
       setKeywordError(
         err.message || 'Wystąpił błąd podczas analizy słów kluczowych'
       );
+    } finally {
+      setLoadingState('keywordPropositions', false);
     }
   };
 
   const handleRelatedKeywordsSubmit = async (keywords) => {
     setKeywordError(null);
+    setLoadingState('relatedKeywords', true);
     try {
       const data = await getRelatedKeywords(keywords);
       if (Array.isArray(data)) {
@@ -114,11 +139,14 @@ function App() {
       setKeywordError(
         err.message || 'Wystąpił błąd podczas analizy słów kluczowych'
       );
+    } finally {
+      setLoadingState('relatedKeywords', false);
     }
   };
 
   const handleTop3ResultsSubmit = async (keywords) => {
     setKeywordError(null);
+    setLoadingState('top3Results', true);
     try {
       const data = await getTop3Results(keywords);
       setTop3Results(data);
@@ -126,21 +154,26 @@ function App() {
       setKeywordError(
         err.message || 'Wystąpił błąd podczas pobierania TOP3 wyników'
       );
+    } finally {
+      setLoadingState('top3Results', false);
     }
   };
 
   const handleUrlAnalysis = async (urls) => {
     setKeywordError(null);
+    setLoadingState('urlAnalysis', true);
     try {
       const data = await analyzeUrls(urls);
       setUrlAnalysisResults(data);
     } catch (err) {
       setKeywordError(err.message || 'Wystąpił błąd podczas analizy URL');
+    } finally {
+      setLoadingState('urlAnalysis', false);
     }
   };
 
   if (loading) {
-    return <div>Checking authentication status...</div>;
+    return <LoadingScreen />;
   }
 
   if (!user) {
@@ -166,6 +199,7 @@ function App() {
       top3Results={top3Results}
       handleUrlAnalysis={handleUrlAnalysis}
       urlAnalysisResults={urlAnalysisResults}
+      loadingStates={loadingStates}
     />
   );
 }
