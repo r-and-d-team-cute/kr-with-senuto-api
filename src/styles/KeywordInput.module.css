@@ -18,6 +18,22 @@
   cursor: not-allowed;
 }
 
+.textArea {
+  width: 100%;
+  padding: 0.75rem;
+  margin-bottom: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 1rem;
+  resize: vertical;
+  min-height: 150px;
+}
+
+.textArea:disabled {
+  background-color: #f0f0f0;
+  cursor: not-allowed;
+}
+
 .buttonContainer {
   display: flex;
   flex-direction: column; /* Przyciski w kolumnie */

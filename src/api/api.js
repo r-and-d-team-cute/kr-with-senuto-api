@@ -72,4 +72,48 @@ export const analyzeUrls = async (urls) => {
   }
 };
 
+export const getMultipleKeywordsPropositions = async (keywords) => {
+  try {
+    const response = await api.post('/getMultipleKeywordsPropositions', {
+      keywords,
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Error analyzing multiple keywords:', error);
+    throw error;
+  }
+};
+
+export const getMultipleRelatedKeywords = async (keywords) => {
+  try {
+    const response = await api.post('/getMultipleRelatedKeywords', {
+      keywords,
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Error getting multiple related keywords:', error);
+    throw error;
+  }
+};
+
+export const getMultipleTop3Results = async (keywords) => {
+  try {
+    const response = await api.post('/getMultipleTop3Results', { keywords });
+    return response.data;
+  } catch (error) {
+    console.error('Error getting multiple top 3 results:', error);
+    throw error;
+  }
+};
+
+export const analyzeMultipleUrls = async (urlGroups) => {
+  try {
+    const response = await api.post('/analyzeMultipleUrls', { urlGroups });
+    return response.data;
+  } catch (error) {
+    console.error('Error analyzing multiple URLs:', error);
+    throw error;
+  }
+};
+
 export default api;

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { convertToCSV } from '../utils';
+import TabSwitcher from './TabSwitcher';
 import KeywordInput from './KeywordInput';
 import KeywordResults from './KeywordResults';
 import Top3Results from './Top3Results';
@@ -14,14 +15,23 @@ const MainView = ({
   keywordPropositionResults,
   handleRelatedKeywordsSubmit,
   relatedKeywordsResults,
-  keywordError,
   handleTop3ResultsSubmit,
   top3Results,
   handleUrlAnalysis,
   urlAnalysisResults,
+  keywordError,
+  handleMultipleKeywordPropositionSubmit,
+  multipleKeywordPropositionResults,
+  handleMultipleRelatedKeywordsSubmit,
+  multipleRelatedKeywordsResults,
+  handleMultipleTop3ResultsSubmit,
+  multipleTop3Results,
+  handleMultipleUrlAnalysis,
+  multipleUrlAnalysisResults,
   loadingStates,
 }) => {
   const [activeTab, setActiveTab] = useState('propositions');
+  const [intentMode, setIntentMode] = useState('single');
   const [showScrollTop, setShowScrollTop] = useState(false);
 
   useEffect(() => {
@@ -52,6 +62,14 @@ const MainView = ({
     document.body.removeChild(link);
   };
 
+  const getActiveSubmitHandler = (singleHandler, multipleHandler) => {
+    return intentMode === 'single' ? singleHandler : multipleHandler;
+  };
+
+  const getActiveResults = (singleResults, multipleResults) => {
+    return intentMode === 'single' ? singleResults : multipleResults;
+  };
+
   return (
     <div className={styles.mainContainer}>
       <div className={styles.header}>
@@ -71,10 +89,24 @@ const MainView = ({
       )}
 
       <div className={styles.contentSection}>
+        <TabSwitcher
+          intentMode={intentMode}
+          setIntentMode={setIntentMode}
+        />
         <KeywordInput
-          onSubmit={handleKeywordPropositionSubmit}
-          onRelatedSubmit={handleRelatedKeywordsSubmit}
-          onTop3Submit={handleTop3ResultsSubmit}
+          onSubmit={getActiveSubmitHandler(
+            handleKeywordPropositionSubmit,
+            handleMultipleKeywordPropositionSubmit
+          )}
+          onRelatedSubmit={getActiveSubmitHandler(
+            handleRelatedKeywordsSubmit,
+            handleMultipleRelatedKeywordsSubmit
+          )}
+          onTop3Submit={getActiveSubmitHandler(
+            handleTop3ResultsSubmit,
+            handleMultipleTop3ResultsSubmit
+          )}
+          intentMode={intentMode}
           loadingStates={loadingStates}
         />
         {keywordError && <p className={styles.error}>{keywordError}</p>}
@@ -130,7 +162,10 @@ const MainView = ({
                 <button
                   onClick={() =>
                     downloadCSV(
-                      keywordPropositionResults,
+                      getActiveResults(
+                        keywordPropositionResults,
+                        multipleKeywordPropositionResults
+                      ),
                       'propositions',
                       'propozycje_slow_kluczowych.csv'
                     )
@@ -141,8 +176,12 @@ const MainView = ({
               </div>
             </div>
             <KeywordResults
-              results={keywordPropositionResults}
+              results={getActiveResults(
+                keywordPropositionResults,
+                multipleKeywordPropositionResults
+              )}
               type='propositions'
+              intentMode={intentMode}
             />
           </>
         )}
@@ -154,7 +193,10 @@ const MainView = ({
                 <button
                   onClick={() =>
                     downloadCSV(
-                      relatedKeywordsResults,
+                      getActiveResults(
+                        relatedKeywordsResults,
+                        multipleRelatedKeywordsResults
+                      ),
                       'related',
                       'powiazane_slowa_kluczowe.csv'
                     )
@@ -165,8 +207,12 @@ const MainView = ({
               </div>
             </div>
             <KeywordResults
-              results={relatedKeywordsResults}
+              results={getActiveResults(
+                relatedKeywordsResults,
+                multipleRelatedKeywordsResults
+              )}
               type='related'
+              intentMode={intentMode}
             />
           </>
         )}
@@ -185,9 +231,13 @@ const MainView = ({
               </div>
             </div>
             <Top3Results
-              results={top3Results}
-              onAnalyze={handleUrlAnalysis}
+              results={getActiveResults(top3Results, multipleTop3Results)}
+              onAnalyze={getActiveSubmitHandler(
+                handleUrlAnalysis,
+                handleMultipleUrlAnalysis
+              )}
               loadingStates={loadingStates}
+              intentMode={intentMode}
             />
           </>
         )}
@@ -199,7 +249,10 @@ const MainView = ({
                 <button
                   onClick={() =>
                     downloadCSV(
-                      urlAnalysisResults,
+                      getActiveResults(
+                        urlAnalysisResults,
+                        multipleUrlAnalysisResults
+                      ),
                       'urlAnalysis',
                       'analiza_url.csv'
                     )
@@ -209,7 +262,13 @@ const MainView = ({
                 </button>
               </div>
             </div>
-            <UrlAnalysisResults results={urlAnalysisResults} />
+            <UrlAnalysisResults
+              results={getActiveResults(
+                urlAnalysisResults,
+                multipleUrlAnalysisResults
+              )}
+              intentMode={intentMode}
+            />
           </>
         )}
       </div>

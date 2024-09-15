@@ -40,3 +40,11 @@
 .urlCell a:hover {
   text-decoration: underline;
 }
+
+.errorCell {
+  color: #721c24;
+  background-color: #f8d7da;
+  padding: 0.75rem;
+  text-align: center;
+  font-style: italic;
+}

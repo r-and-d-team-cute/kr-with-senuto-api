@@ -1,0 +1,39 @@
+.tabSwitcher {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  margin-bottom: 1rem;
+}
+
+.tabButton {
+  flex: 1;
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  border: none;
+  background-color: #f0f0f0;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.tabButton:first-child {
+  border-top-left-radius: 4px;
+  border-bottom-left-radius: 4px;
+}
+
+.tabButton:last-child {
+  border-top-right-radius: 4px;
+  border-bottom-right-radius: 4px;
+}
+
+.tabButton.active {
+  background-color: #20b2aa;
+  color: white;
+}
+
+.tabButton:hover {
+  background-color: #e0e0e0;
+}
+
+.tabButton.active:hover {
+  background-color: #1a9089;
+}

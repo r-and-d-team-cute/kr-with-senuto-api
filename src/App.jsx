@@ -10,6 +10,10 @@ import {
   getRelatedKeywords,
   getTop3Results,
   analyzeUrls,
+  getMultipleKeywordsPropositions,
+  getMultipleRelatedKeywords,
+  getMultipleTop3Results,
+  analyzeMultipleUrls,
 } from './api/api';
 
 function App() {
@@ -28,7 +32,21 @@ function App() {
     relatedKeywords: false,
     top3Results: false,
     urlAnalysis: false,
+    multipleKeywordPropositions: false,
+    multipleRelatedKeywords: false,
+    multipleTop3Results: false,
+    multipleUrlAnalysis: false,
   });
+  const [
+    multipleKeywordPropositionResults,
+    setMultipleKeywordPropositionResults,
+  ] = useState([]);
+  const [multipleRelatedKeywordsResults, setMultipleRelatedKeywordsResults] =
+    useState([]);
+  const [multipleTop3Results, setMultipleTop3Results] = useState([]);
+  const [multipleUrlAnalysisResults, setMultipleUrlAnalysisResults] = useState(
+    []
+  );
 
   const setLoadingState = (key, value) => {
     setLoadingStates((prev) => ({ ...prev, [key]: value }));
@@ -172,6 +190,71 @@ function App() {
     }
   };
 
+  const handleMultipleKeywordPropositionSubmit = async (keywords) => {
+    setKeywordError(null);
+    setLoadingStates((prev) => ({
+      ...prev,
+      multipleKeywordPropositions: true,
+    }));
+    try {
+      const data = await getMultipleKeywordsPropositions(keywords);
+      setMultipleKeywordPropositionResults(data);
+    } catch (err) {
+      setKeywordError(
+        err.message || 'Wystąpił błąd podczas analizy wielu słów kluczowych'
+      );
+    } finally {
+      setLoadingStates((prev) => ({
+        ...prev,
+        multipleKeywordPropositions: false,
+      }));
+    }
+  };
+
+  const handleMultipleRelatedKeywordsSubmit = async (keywords) => {
+    setKeywordError(null);
+    setLoadingStates((prev) => ({ ...prev, multipleRelatedKeywords: true }));
+    try {
+      const data = await getMultipleRelatedKeywords(keywords);
+      setMultipleRelatedKeywordsResults(data);
+    } catch (err) {
+      setKeywordError(
+        err.message ||
+          'Wystąpił błąd podczas analizy powiązanych słów kluczowych'
+      );
+    } finally {
+      setLoadingStates((prev) => ({ ...prev, multipleRelatedKeywords: false }));
+    }
+  };
+
+  const handleMultipleTop3ResultsSubmit = async (keywords) => {
+    setKeywordError(null);
+    setLoadingStates((prev) => ({ ...prev, multipleTop3Results: true }));
+    try {
+      const data = await getMultipleTop3Results(keywords);
+      setMultipleTop3Results(data);
+    } catch (err) {
+      setKeywordError(
+        err.message || 'Wystąpił błąd podczas pobierania wielu TOP3 wyników'
+      );
+    } finally {
+      setLoadingStates((prev) => ({ ...prev, multipleTop3Results: false }));
+    }
+  };
+
+  const handleMultipleUrlAnalysis = async (urlGroups) => {
+    setKeywordError(null);
+    setLoadingStates((prev) => ({ ...prev, multipleUrlAnalysis: true }));
+    try {
+      const data = await analyzeMultipleUrls(urlGroups);
+      setMultipleUrlAnalysisResults(data);
+    } catch (err) {
+      setKeywordError(err.message || 'Wystąpił błąd podczas analizy wielu URL');
+    } finally {
+      setLoadingStates((prev) => ({ ...prev, multipleUrlAnalysis: false }));
+    }
+  };
+
   if (loading) {
     return <LoadingScreen />;
   }
@@ -200,6 +283,16 @@ function App() {
       handleUrlAnalysis={handleUrlAnalysis}
       urlAnalysisResults={urlAnalysisResults}
       loadingStates={loadingStates}
+      handleMultipleKeywordPropositionSubmit={
+        handleMultipleKeywordPropositionSubmit
+      }
+      multipleKeywordPropositionResults={multipleKeywordPropositionResults}
+      handleMultipleRelatedKeywordsSubmit={handleMultipleRelatedKeywordsSubmit}
+      multipleRelatedKeywordsResults={multipleRelatedKeywordsResults}
+      handleMultipleTop3ResultsSubmit={handleMultipleTop3ResultsSubmit}
+      multipleTop3Results={multipleTop3Results}
+      handleMultipleUrlAnalysis={handleMultipleUrlAnalysis}
+      multipleUrlAnalysisResults={multipleUrlAnalysisResults}
     />
   );
 }
