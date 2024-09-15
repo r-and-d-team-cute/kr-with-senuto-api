@@ -1,49 +1,32 @@
 const axios = require('axios');
-// const FormData = require('form-data');
 
 const SENUTO_API_URL_GET_KEYWORDS_FOR_URL =
   'https://api.senuto.com/api/visibility_analysis/reports/positions/getData';
 
+// Funkcja opóźniająca
+const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
 exports.getKeywordsForUrls = async (urls, token) => {
-  const results = await Promise.all(
-    urls.map(async (url) => {
-      try {
-        const keywordsData = await this.getKeywordsForSingleUrl(url, token);
-        return { url, keywords: keywordsData };
-      } catch (error) {
-        console.error(
-          `Błąd podczas pobierania słów kluczowych dla ${url}:`,
-          error
-        );
-        return { url, error: 'Nie udało się pobrać słów kluczowych' };
-      }
-    })
-  );
+  const results = [];
+  for (const url of urls) {
+    try {
+      const keywordsData = await this.getKeywordsForSingleUrl(url, token);
+      results.push({ url, keywords: keywordsData });
+    } catch (error) {
+      console.error(
+        `Błąd podczas pobierania słów kluczowych dla ${url}:`,
+        error
+      );
+      results.push({ url, error: 'Nie udało się pobrać słów kluczowych' });
+    }
+    // Dodaj opóźnienie 1 sekundy między zapytaniami
+    await delay(1000);
+  }
   return results;
 };
 
 exports.getKeywordsForSingleUrl = async (url, token) => {
   console.log(`Rozpoczynanie żądania dla URL: "${url}"`);
-
-  //   const formData = new FormData();
-  //   formData.append('domain', url);
-  //   formData.append('fetch_mode', 'url');
-  //   formData.append('country_id', '200');
-  //     formData.append(
-  //       'filtering',
-  //       JSON.stringify([
-  //         {
-  //           filters: [
-  //             {
-  //               value: '10',
-  //               match: 'lte',
-  //               key: 'statistics.position.current',
-  //               type: 'number',
-  //             },
-  //           ],
-  //         },
-  //       ])
-  //     );
 
   const payload = {
     domain: url,
@@ -67,7 +50,6 @@ exports.getKeywordsForSingleUrl = async (url, token) => {
     method: 'post',
     url: SENUTO_API_URL_GET_KEYWORDS_FOR_URL,
     headers: {
-      //   ...formData.getHeaders(),
       Authorization: `Bearer ${token}`,
     },
     data: payload,

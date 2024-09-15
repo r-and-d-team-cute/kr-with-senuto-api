@@ -21,4 +21,21 @@ router.post(
 );
 router.post('/getRelatedKeywords', auth, keywordController.getRelatedKeywords);
 
+router.post(
+  '/getMultipleKeywordsPropositions',
+  auth,
+  keywordController.getMultipleKeywordsPropositions
+);
+router.post(
+  '/getMultipleRelatedKeywords',
+  auth,
+  keywordController.getMultipleRelatedKeywords
+);
+router.post('/getMultipleTop3Results', searchController.getMultipleTop3Results);
+router.post(
+  '/analyzeMultipleUrls',
+  auth,
+  urlsAnalysisController.analyzeMultipleUrls
+);
+
 module.exports = router;
