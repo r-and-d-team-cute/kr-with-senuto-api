@@ -53,13 +53,18 @@ const MainView = ({
 
   const downloadCSV = (data, type, filename) => {
     const csvContent = convertToCSV(data, type);
-    const encodedUri = encodeURI(`data:text/csv;charset=utf-8,${csvContent}`);
+    const BOM = '\uFEFF'; // Dodaj BOM na początku pliku
+    const blob = new Blob([BOM + csvContent], {
+      type: 'text/csv;charset=utf-8;',
+    });
+    const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
-    link.setAttribute('href', encodedUri);
+    link.setAttribute('href', url);
     link.setAttribute('download', filename);
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
+    URL.revokeObjectURL(url); // Zwolnij zasoby
   };
 
   const getActiveSubmitHandler = (singleHandler, multipleHandler) => {
