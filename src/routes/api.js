@@ -3,6 +3,7 @@ const authController = require('../controllers/authController');
 const keywordController = require('../controllers/keywordController');
 const searchController = require('../controllers/searchController');
 const urlsAnalysisController = require('../controllers/urlsAnalysisController');
+const domainVisibilityController = require('../controllers/domainVisibilityController');
 const auth = require('../middleware/auth');
 
 const router = express.Router();
@@ -36,6 +37,32 @@ router.post(
   '/analyzeMultipleUrls',
   auth,
   urlsAnalysisController.analyzeMultipleUrls
+);
+
+router.post(
+  '/getDomainStatistics',
+  auth,
+  domainVisibilityController.getDomainStatistics
+);
+
+router.post(
+  '/getPositionsHistory',
+  auth,
+  domainVisibilityController.getPositionsHistory
+);
+
+router.post(
+  '/getDomainSections',
+  auth,
+  domainVisibilityController.getDomainSections
+);
+
+router.post('/getDomainUrls', auth, domainVisibilityController.getDomainUrls);
+
+router.post(
+  '/getDomainVisibilityData',
+  auth,
+  domainVisibilityController.getDomainVisibilityData
 );
 
 module.exports = router;

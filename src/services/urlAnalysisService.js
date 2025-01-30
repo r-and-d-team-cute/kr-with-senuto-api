@@ -1,4 +1,5 @@
 const axios = require('axios');
+// const FormData = require('form-data');
 
 const SENUTO_API_URL_GET_KEYWORDS_FOR_URL =
   'https://api.senuto.com/api/visibility_analysis/reports/positions/getData';
@@ -50,6 +51,7 @@ exports.getKeywordsForSingleUrl = async (url, token) => {
     method: 'post',
     url: SENUTO_API_URL_GET_KEYWORDS_FOR_URL,
     headers: {
+      //   ...formData.getHeaders(),
       Authorization: `Bearer ${token}`,
     },
     data: payload,
