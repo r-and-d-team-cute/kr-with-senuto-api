@@ -48,6 +48,54 @@ exports.getDomainStatistics = async (req, res) => {
   }
 };
 
+exports.getDomainStatisticsByParam = async (req, res) => {
+  try {
+    const { domain } = req.query;
+    const token = req.headers.authorization?.split(' ')[1] || req.cookies.token;
+
+    if (!domain) {
+      return res.status(400).json({
+        success: false,
+        message: 'Nie podano domeny do analizy',
+      });
+    }
+
+    if (!token) {
+      return res.status(401).json({
+        success: false,
+        message: 'Brak tokenu autoryzacyjnego',
+      });
+    }
+
+    const stats = await domainVisibilityService.getDomainStatistics(
+      domain,
+      token
+    );
+
+    res.json({
+      success: true,
+      data: stats,
+    });
+  } catch (error) {
+    console.error('Błąd w kontrolerze getDomainStatisticsByParam:', error);
+
+    // Jeśli to błąd walidacji domeny, zwracamy 400
+    if (error.message.includes('format')) {
+      return res.status(400).json({
+        success: false,
+        message: error.message,
+      });
+    }
+
+    const statusCode = error.response?.status || 500;
+
+    res.status(statusCode).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
 exports.getPositionsHistory = async (req, res) => {
   try {
     const { domain } = req.body;

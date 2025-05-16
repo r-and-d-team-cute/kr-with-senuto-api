@@ -12,6 +12,14 @@ router.post('/login', authController.login);
 router.post('/logout', authController.logout);
 router.get('/test', auth, authController.testConnection);
 router.get('/getCurrentUser', auth, authController.getCurrentUser);
+
+// Dodajemy nowy endpoint GET do istniejących tras
+router.get(
+  '/getDomainStatisticsByParam',
+  auth,
+  domainVisibilityController.getDomainStatisticsByParam
+);
+
 router.post('/getTop3Results', searchController.getTop3Results);
 router.post('/analyzeUrls', auth, urlsAnalysisController.analyzeUrls);
 
