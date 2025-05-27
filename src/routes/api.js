@@ -20,8 +20,11 @@ router.get(
   domainVisibilityController.getDomainStatisticsByParam
 );
 
+router.get('/getTop15ByUrlParams', auth, urlsAnalysisController.getUrlTop15);
+
 router.post('/getTop3Results', searchController.getTop3Results);
 router.post('/analyzeUrls', auth, urlsAnalysisController.analyzeUrls);
+router.post('/getTop15UrlPositions', urlsAnalysisController.analyzeUrlTop15);
 
 router.post(
   '/getKeywordsPropositions',

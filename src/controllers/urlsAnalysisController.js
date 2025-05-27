@@ -67,3 +67,74 @@ exports.analyzeMultipleUrls = async (req, res) => {
     });
   }
 };
+
+exports.analyzeUrlTop15 = async (req, res) => {
+  try {
+    const { url } = req.body;
+    const token = req.headers.authorization?.split(' ')[1] || req.cookies.token;
+
+    if (!url) {
+      return res.status(400).json({
+        message: 'Proszę podać adres URL w body zapytania.',
+      });
+    }
+
+    const results = await urlAnalysisService.getTop15KeywordsForSingleUrl(
+      url,
+      token
+    );
+
+    res.json(results);
+  } catch (error) {
+    console.error('Błąd w analyzeUrls:', error);
+    res.status(500).json({
+      message: 'Wystąpił błąd podczas analizy adresów URL.',
+      details: error.message,
+    });
+  }
+};
+
+exports.getUrlTop15 = async (req, res) => {
+  try {
+    const { url } = req.query;
+    const token = req.headers.authorization?.split(' ')[1] || req.cookies.token;
+
+    if (!url) {
+      return res.status(400).json({
+        success: false,
+        message: 'Nie podano adresu URL do analizy',
+      });
+    }
+
+    if (!token) {
+      return res.status(401).json({
+        success: false,
+        message: 'Brak tokenu autoryzacyjnego',
+      });
+    }
+
+    const results = await urlAnalysisService.getTop15KeywordsForSingleUrl(
+      url,
+      token
+    );
+
+    res.json(results);
+  } catch (error) {
+    console.error('Błąd w kontrolerze getUrlTop15:', error);
+
+    // Jeśli to błąd walidacji domeny, zwracamy 400
+    if (error.message.includes('format')) {
+      return res.status(400).json({
+        success: false,
+        message: error.message,
+      });
+    }
+
+    const statusCode = error.response?.status || 500;
+
+    res.status(statusCode).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
