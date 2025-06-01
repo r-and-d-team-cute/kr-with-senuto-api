@@ -89,3 +89,32 @@ exports.getMultipleTop3Results = async (req, res) => {
     });
   }
 };
+
+exports.getTop3UrlResultsByParams = async (req, res) => {
+  try {
+    const { keyword } = req.query;
+    const token = req.headers.authorization?.split(' ')[1] || req.cookies.token;
+
+    if (!keyword) {
+      return res.status(400).json({
+        message: 'Proszę podać słowo kluczowe w params zapytania.',
+      });
+    }
+
+    if (!token || token.split('.').length !== 3) {
+      return res
+        .status(401)
+        .json({ message: 'Brak autoryzacji lub nieprawidłowy format tokena' });
+    }
+
+    const allResults = await searchService.getTop3Results(keyword, token);
+
+    res.json(allResults);
+  } catch (error) {
+    console.error('Błąd w getTop3Results:', error);
+    res.status(500).json({
+      message: 'Wystąpił błąd podczas pobierania top 3 wyników.',
+      details: error.message,
+    });
+  }
+};

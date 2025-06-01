@@ -21,6 +21,17 @@ router.get(
 );
 
 router.get('/getTop15ByUrlParams', auth, urlsAnalysisController.getUrlTop15);
+router.get(
+  '/getTop3UrlResultsByParams',
+  auth,
+  searchController.getTop3UrlResultsByParams
+);
+
+router.get(
+  '/analyzeUrlsByParams',
+  auth,
+  urlsAnalysisController.analyzeUrlsByParams
+);
 
 router.post('/getTop3Results', searchController.getTop3Results);
 router.post('/analyzeUrls', auth, urlsAnalysisController.analyzeUrls);

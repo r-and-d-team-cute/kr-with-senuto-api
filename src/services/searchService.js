@@ -95,7 +95,7 @@ async function getTop3Results(keyword, token) {
 
     return results;
   } catch (error) {
-    console.error('Błąd w getTop3Results:', error);
+    console.error('Błąd w getTop3Results:', error.response);
 
     if (error.response) {
       switch (error.response.status) {
@@ -104,7 +104,7 @@ async function getTop3Results(keyword, token) {
         case 429:
           throw new Error('Przekroczono limit zapytań do API');
         default:
-          throw new Error(`Błąd serwera: ${error.response.status}`);
+          throw new Error(`Błąd: ${error.response.status}`);
       }
     }
 
