@@ -64,6 +64,7 @@ exports.getKeywordsForSingleUrl = async (url, token) => {
       keyword: item.keyword,
       searches: item.statistics.searches.current,
       cpc: item.statistics.cpc.current,
+      position: item.statistics.position.current,
     }));
   } catch (error) {
     console.error(`Błąd w getKeywordsForSingleUrl dla URL "${url}":`);
