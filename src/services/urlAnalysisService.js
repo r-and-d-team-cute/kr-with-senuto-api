@@ -9,7 +9,13 @@ const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
 exports.getKeywordsForUrls = async (urls, token) => {
   const results = [];
-  for (const url of urls) {
+
+  // Upewnij się, że urls jest tablicą
+  const urlsArray = Array.isArray(urls) ? urls : [urls];
+
+  for (const url of urlsArray) {
+    console.log('------------------------------------url in for loop', url);
+
     try {
       const keywordsData = await this.getKeywordsForSingleUrl(url, token);
       results.push({ url, keywords: keywordsData });
@@ -23,6 +29,7 @@ exports.getKeywordsForUrls = async (urls, token) => {
     // Dodaj opóźnienie 1 sekundy między zapytaniami
     await delay(1000);
   }
+
   return results;
 };
 

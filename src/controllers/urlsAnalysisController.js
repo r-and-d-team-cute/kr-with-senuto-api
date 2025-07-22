@@ -97,6 +97,7 @@ exports.analyzeUrlTop15 = async (req, res) => {
 exports.getUrlTop15 = async (req, res) => {
   try {
     const { url } = req.query;
+
     const token = req.headers.authorization?.split(' ')[1] || req.cookies.token;
 
     if (!url) {
@@ -142,8 +143,6 @@ exports.getUrlTop15 = async (req, res) => {
 exports.analyzeUrlsByParams = async (req, res) => {
   try {
     const { urls } = req.query;
-
-    console.log(urls);
     const token = req.headers.authorization?.split(' ')[1] || req.cookies.token;
 
     if (!urls || urls.length === 0) {
