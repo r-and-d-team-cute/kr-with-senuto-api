@@ -7,7 +7,7 @@ const api = axios.create({
 
 export const login = async (email, password) => {
   const response = await api.post('/login', { email, password });
-  console.log(response);
+  
   return response.data;
 };
 
@@ -33,7 +33,7 @@ export const getCurrentUser = async () => {
 export const getKeywordsPropositions = async (keywords) => {
   try {
     const response = await api.post('/getKeywordsPropositions', { keywords });
-    console.log(response);
+    
     return response.data;
   } catch (error) {
     console.error('Error analyzing keywords:', error);
@@ -44,7 +44,7 @@ export const getKeywordsPropositions = async (keywords) => {
 export const getRelatedKeywords = async (keywords) => {
   try {
     const response = await api.post('/getRelatedKeywords', { keywords });
-    console.log(response);
+    
     return response.data;
   } catch (error) {
     console.error('Error getting related keywords:', error);
